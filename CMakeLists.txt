@@ -2,10 +2,21 @@ cmake_minimum_required(VERSION 2.8.12)
 PROJECT(lzma C)
 
 include(CheckCSourceCompiles)
+include(CheckCCompilerFlag)
 include(CheckIncludeFile)
 include(CheckSymbolExists)
 include(CheckTypeSize)
 include(TestBigEndian)
+
+CHECK_C_COMPILER_FLAG("-std=gnu99" COMPILER_SUPPORTS_GNU99)
+if(COMPILER_SUPPORTS_GNU99)
+    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -std=gnu99")
+else()
+    CHECK_C_COMPILER_FLAG("-std=c99" COMPILER_SUPPORTS_C99)
+    if(COMPILER_SUPPORTS_C99)
+        set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -std=c99")
+    endif()
+endif()
 
 check_c_source_compiles(
   "int test (void *restrict x);\nint main (void) {return 0;}"
