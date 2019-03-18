@@ -1,6 +1,11 @@
 cmake_minimum_required(VERSION 2.8.12)
 PROJECT(lzma C)
 
+if (POLICY CMP0063)
+    # Use of `<LANG>_VISIBILITY_PRESET` in OBJECT libraries
+    cmake_policy(SET CMP0063 NEW)
+endif()
+
 include(CheckCSourceCompiles)
 include(CheckCCompilerFlag)
 include(CheckIncludeFile)
