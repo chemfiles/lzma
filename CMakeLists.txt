@@ -201,7 +201,8 @@ set(LZMA_SRCS
 configure_file(config.h.in config.h @ONLY)
 
 add_library(lzma OBJECT ${LZMA_SRCS})
-target_compile_definitions(lzma PUBLIC "-DHAVE_CONFIG_H")
+target_compile_definitions(lzma PUBLIC HAVE_CONFIG_H)
+target_compile_definitions(lzma PUBLIC LZMA_API_STATIC)
 target_include_directories(lzma PUBLIC
     "${CMAKE_CURRENT_SOURCE_DIR}/common"
     "${CMAKE_CURRENT_SOURCE_DIR}/liblzma/api"
