@@ -25,8 +25,7 @@
 // MATCH_LEN_MIN bytes. Unaligned access gives tiny gain so there's no
 // reason to not use it when it is supported.
 #ifdef TUKLIB_FAST_UNALIGNED_ACCESS
-#	define not_equal_16(a, b) \
-		(*(const uint16_t *)(a) != *(const uint16_t *)(b))
+#	define not_equal_16(a, b) (read16ne(a) != read16ne(b))
 #else
 #	define not_equal_16(a, b) \
 		((a)[0] != (b)[0] || (a)[1] != (b)[1])
@@ -72,6 +71,18 @@ typedef struct {
 struct lzma_lzma1_encoder_s {
 	/// Range encoder
 	lzma_range_encoder rc;
+
+	/// Uncompressed size (doesn't include possible preset dictionary)
+	uint64_t uncomp_size;
+
+	/// If non-zero, produce at most this much output.
+	/// Some input may then be missing from the output.
+	uint64_t out_limit;
+
+	/// If the above out_limit is non-zero, *uncomp_size_ptr is set to
+	/// the amount of uncompressed data that we were able to fit
+	/// in the output buffer.
+	uint64_t *uncomp_size_ptr;
 
 	/// State
 	lzma_lzma_state state;
